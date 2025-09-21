@@ -12,11 +12,6 @@ export async function POST(req) {
     "Access-Control-Allow-Credentials": "true",
   };
 
-  // Handle OPTIONS preflight
-  export async function OPTIONS() {
-    return NextResponse.json({}, { headers: corsHeaders });
-  }
-
   try {
     const data = await req.json();
 

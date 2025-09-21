@@ -12,11 +12,7 @@ export async function POST(req) {
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Allow-Credentials": "true",
   };
-
-  export async function OPTIONS() {
-    return NextResponse.json({}, { headers: corsHeaders });
-  }
-
+  
   try {
     const data = await req.json();
 
