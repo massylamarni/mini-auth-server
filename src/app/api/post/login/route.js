@@ -5,14 +5,18 @@ import bcrypt from "bcryptjs";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export async function POST(req) {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Credentials": "true",
-  };
+const corsHeaders = (req) => {
+  "Access-Control-Allow-Origin": req.headers.get("origin"),
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Credentials": "true",
+};
 
+export async function OPTIONS(req) {
+  return NextResponse.json({}, { headers: corsHeaders(req) });
+}
+
+export async function POST(req) {
   try {
     const data = await req.json();
 
@@ -24,7 +28,7 @@ export async function POST(req) {
     if (!user || !(await bcrypt.compare(data.password, user.password))) {
       return NextResponse.json(
         { error: "Invalid credentials" },
-        { status: 401, headers: corsHeaders }
+        { status: 401, headers: corsHeaders(req) }
       );
     }
 
@@ -38,7 +42,7 @@ export async function POST(req) {
     // Send token back as cookie + JSON
     const res = NextResponse.json(
       { success: true, token },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders(req) }
     );
 
     res.cookies.set("auth_token", token, {
@@ -53,7 +57,7 @@ export async function POST(req) {
     console.error("Login error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders(req) }
     );
   }
 }

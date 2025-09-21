@@ -3,15 +3,18 @@ import { connectToDatabase } from '@/lib/mongodb';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export async function POST(req) {
-  // Common CORS headers
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": req.headers.get("origin"),
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Credentials": "true",
-  };
+const corsHeaders = (req) => {
+  "Access-Control-Allow-Origin": req.headers.get("origin"),
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Credentials": "true",
+};
 
+export async function OPTIONS(req) {
+  return NextResponse.json({}, { headers: corsHeaders(req) });
+}
+
+export async function POST(req) {
   try {
     const data = await req.json();
 
@@ -19,14 +22,14 @@ export async function POST(req) {
     if (!data.email || !emailRegex.test(data.email)) {
       return NextResponse.json(
         { error: "Invalid email address" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders(req) }
       );
     }
 
     if (!data.password || data.password.length < 10) {
       return NextResponse.json(
         { error: "Password must be at least 10 characters long" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders(req) }
       );
     }
 
@@ -37,7 +40,7 @@ export async function POST(req) {
     if (existing) {
       return NextResponse.json(
         { error: "User already exists" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders(req) }
       );
     }
 
@@ -57,7 +60,7 @@ export async function POST(req) {
 
     const res = NextResponse.json(
       { success: true },
-      { status: 201, headers: corsHeaders }
+      { status: 201, headers: corsHeaders(req) }
     );
 
     res.cookies.set("auth_token", token, {
@@ -72,7 +75,7 @@ export async function POST(req) {
     console.error("Error saving user:", error);
     return NextResponse.json(
       { error: "Failed to save user" },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders(req) }
     );
   }
 }
