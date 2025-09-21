@@ -63,10 +63,11 @@ export async function POST(req) {
       { status: 201, headers: corsHeaders(req) }
     );
 
+    console.log("token");
     res.cookies.set("auth_token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       path: "/",
     });
 
