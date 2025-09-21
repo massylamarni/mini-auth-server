@@ -13,7 +13,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
     const data = await req.json();
 
