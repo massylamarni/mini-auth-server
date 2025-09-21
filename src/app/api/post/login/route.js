@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function POST(req) {
   const corsHeaders = {
-    "Access-Control-Allow-Origin": "https://project-gjixnerlsgq9ncuurxoo.framercanvas.com",
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Allow-Credentials": "true",
