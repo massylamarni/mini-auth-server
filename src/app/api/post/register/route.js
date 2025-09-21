@@ -3,19 +3,20 @@ import { connectToDatabase } from '@/lib/mongodb';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// Common CORS headers
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
-
-// Handle OPTIONS preflight
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
-}
-
 export async function POST(req) {
+  // Common CORS headers
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": req.headers.get("origin"),
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Credentials": "true",
+  };
+
+  // Handle OPTIONS preflight
+  export async function OPTIONS() {
+    return NextResponse.json({}, { headers: corsHeaders });
+  }
+
   try {
     const data = await req.json();
 
