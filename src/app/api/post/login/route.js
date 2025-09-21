@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,7 +15,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
     const data = await req.json();
 

@@ -20,14 +20,14 @@ export async function POST(req) {
     const data = await req.json();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email)) {
+    if (!data.email || !emailRegex.test(data.email)) {
       return NextResponse.json(
         { error: "Invalid email address" },
         { status: 400, headers: corsHeaders }
       );
     }
 
-    if (!password || password.length < 10) {
+    if (!data.password || data.password.length < 10) {
       return NextResponse.json(
         { error: "Password must be at least 10 characters long" },
         { status: 400, headers: corsHeaders }
@@ -55,7 +55,7 @@ export async function POST(req) {
 
     const token = jwt.sign(
       { userId: newUser.insertedId, email: data.email },
-      process.env.JWT_SECRET!,
+      process.env.JWT_SECRET,
       { expiresIn: "48h" }
     );
 
